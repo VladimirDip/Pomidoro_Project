@@ -1,5 +1,4 @@
 from tkinter import *
-import time
 import math
 
 # ---------------------------- CONSTANTS ------------------------------- #
@@ -8,35 +7,32 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 1
+WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 REPS = 0
 timer = None
 
 
-# ---------------------------- Change activate button ------------------------------- #
-def change_start_button():
-    if (left_botton['state'] == "normal"):
+# ---------------------------- Start Program ------------------------------- #
+def play_pomidoro():
+    change_button()
+    start_timer()
+
+# ---------------------------- Change button ------------------------------- #
+def change_button():
+    if left_botton['state'] == "normal":
         left_botton.config(state="disable")
         right_botton.config(state="normal")
     else:
         left_botton.config(state="normal")
-
-
-def change_reset_button():
-    if (left_botton['state'] == "normal"):
-        right_botton.config(state="disable")
-    else:
-        right_botton.config(state="normal")
-
+        right_botton.config(state='disable')
 
 # ---------------------------- TIMER RESET ------------------------------- #
 def reset_timer():
     global REPS
     REPS = 0
-    change_start_button()
-    change_reset_button()
+    change_button()
     window.after_cancel(timer)
     canvas.itemconfig(timer_text, text="00:00")
     title_label.config(text='Timer', fg=GREEN)
@@ -50,8 +46,7 @@ def start_timer():
     work_sec = WORK_MIN * 60
     short_breack_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
-    change_reset_button()
-    change_start_button()
+
     if REPS % 8 == 0:
         countdown(long_break_sec)
         title_label.config(text="Long Break", fg=RED)
@@ -61,7 +56,6 @@ def start_timer():
     else:
         countdown(work_sec)
         title_label.config(text="Working", fg=GREEN)
-
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 
@@ -109,7 +103,7 @@ mark_label = Label(font=(FONT_NAME, 10, 'bold'), fg=GREEN, bg=YELLOW)
 mark_label.grid(column=1, row=4)
 
 left_botton = Button(text='Start', font=(FONT_NAME, 9, 'bold'), relief='raised', highlightthickness=0,
-                     command=start_timer)
+                     command=play_pomidoro)
 left_botton.grid(column=0, row=3)
 
 right_botton = Button(text='Reset', font=(FONT_NAME, 9, 'bold'), relief='raised', highlightthickness=0,
